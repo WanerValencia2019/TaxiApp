@@ -1,21 +1,46 @@
-import React from 'react';
-import { View, Text } from 'react-native';
-import { Divider, } from "react-native-elements";
+import React from "react";
+import { StyleSheet } from "react-native";
+import { Divider, Avatar } from "react-native-elements";
 import { DrawerItems } from "react-navigation-drawer";
+import { Container, Text, CardItem, Left, Thumbnail, Body } from "native-base";
 
-function SideBar (props) {
-    console.log(props.descriptors.Home);
-    return (
-        <View>
-            <View style={{backgroundColor:'#303248',marginBottom:40,marginLeft:20,marginTop:20}}>
-                <Text>Moreo Hurtado José</Text>
-                <Text>CC: 201037437646</Text>
-            </View>
-            <Divider></Divider>
-            <DrawerItems {...props}  />
-        </View>
-    )
+const imagenUsuario = require("../../assets/adorable.png");
+function SideBar(props) {
+  console.log(props.descriptors.Home);
+  return (
+    <Container>
+      <CardItem style={styles.CardItem}>
+        <Left>
+          <Avatar source={imagenUsuario} size="large" rounded />
+          <Body style={{ marginHorizontal: 10 }}>
+            <Text style={{ color: "white", fontSize: 18, marginBottom: 10 }}>
+              Yoiler cordoba{" "}
+            </Text>
+            <Text style={{ color: "white", fontSize: 18 }}>
+              Recorridos : 20
+            </Text>
+          </Body>
+        </Left>
+      </CardItem>
+      <Divider></Divider>
+      <DrawerItems {...props} />
+    </Container>
+  );
 }
 
-export default SideBar;
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: "rgba(255,255,255,0.7)",
+    height: "100%",
+    color: "white",
+    marginTop: 24
+  },
+  CardItem: {
+    borderRadius: 0,
+    height: 150,
+    backgroundColor: "#303248",
+    color: "white"
+  }
+});
 
+export default SideBar;
