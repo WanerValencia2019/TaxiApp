@@ -8,15 +8,15 @@ const imagenUsuario = require("../../assets/adorable.png");
 function SideBar(props) {
   console.log(props.descriptors.Home);
   return (
-    <Container>
+    <Container style={{ marginTop: 24 }}>
       <CardItem style={styles.CardItem}>
         <Left>
           <Avatar source={imagenUsuario} size="large" rounded />
           <Body style={{ marginHorizontal: 10 }}>
-            <Text style={{ color: "white", fontSize: 18, marginBottom: 10 }}>
+            <Text style={{ color: "white", fontSize: 16, marginBottom: 10 }}>
               Yoiler cordoba{" "}
             </Text>
-            <Text style={{ color: "white", fontSize: 18 }}>
+            <Text style={{ color: "white", fontSize: 16 }}>
               Recorridos : 20
             </Text>
           </Body>
