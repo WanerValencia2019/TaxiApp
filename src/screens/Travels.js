@@ -5,7 +5,7 @@ import ListTravels from "../components/ListTravels";
 
 function Travels(props) {
   return (
-    <View>
+    <View style={{ backgroundColor: "whitesmoke" }}>
       <HeaderC navigation={props.navigation} />
       <ListTravels />
     </View>
