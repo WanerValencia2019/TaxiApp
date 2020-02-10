@@ -1,13 +1,15 @@
-import React from 'react'
-import { View, Text } from 'react-native'
+import React from "react";
+import { View, Text } from "react-native";
 import HeaderC from "./../components/Header";
-function Travels (props) {
-    return (
-        <View>
-        <HeaderC navigation={props.navigation}/>
-            <Text>Travels</Text>
-        </View>
-    )
+import ListTravels from "../components/ListTravels";
+
+function Travels(props) {
+  return (
+    <View style={{ backgroundColor: "whitesmoke" }}>
+      <HeaderC navigation={props.navigation} />
+      <ListTravels />
+    </View>
+  );
 }
 
 export default Travels;

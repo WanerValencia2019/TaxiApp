@@ -16,9 +16,7 @@ function SideBar(props) {
             <Text style={{ color: "white", fontSize: 16, marginBottom: 10 }}>
               Yoiler cordoba{" "}
             </Text>
-            <Text style={{ color: "white", fontSize: 16 }}>
-              Recorridos : 20
-            </Text>
+            <Text style={{ color: "white", fontSize: 16 }}>Recorridos : 4</Text>
           </Body>
         </Left>
       </CardItem>

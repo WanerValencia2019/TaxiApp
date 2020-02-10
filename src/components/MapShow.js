@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { View, Text, Dimensions, StyleSheet } from "react-native";
+<<<<<<< HEAD
 import MapView, { Marker, Polyline } from "react-native-maps";
+=======
+import MapView, { Marker } from "react-native-maps";
+>>>>>>> 6d49974f4d13b0df962224298105380876c5c26b
 function MapShow() {
   const [long, setlong] = useState(null);
   const [lati, setlati] = useState(null);
@@ -86,7 +90,8 @@ function MapShow() {
           backgroundColor: "#fff",
           alignItems: "center",
           justifyContent: "flex-end"
-        }}>
+        }}
+      >
         <Text>Hola aqu vas</Text>
       </View>
     </View>
