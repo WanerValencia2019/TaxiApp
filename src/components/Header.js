@@ -4,12 +4,13 @@ import { View, Text } from "react-native";
 import { Header, Icon } from "react-native-elements";
 import { DrawerActions } from "react-navigation-drawer";
 function HeaderC(props) {
-  const { navigation } = props;
+  const { navigation,type } = props;
   //console.log(navigation.navigate('Home'));
   return (
     <Header
       containerStyle={{ backgroundColor: "#303248", marginTop: 24, height: 70 }}
       placement="center"
+      
       leftComponent={{
         size: 35,
         icon: "menu",
