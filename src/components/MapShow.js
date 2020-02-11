@@ -13,7 +13,7 @@ function MapShow() {
   const [line, setline] = useState(null);
 
   const Location = () => {
-    navigator.geolocation.getCurrentPosition((position) => {
+    navigator.geolocation.getCurrentPosition(position => {
       const accuracy = position.coords.accuracy;
       const latitud = position.coords.latitude;
       const longitud = position.coords.longitude;
@@ -36,7 +36,7 @@ function MapShow() {
     setlonDelta(lonDelta);
   };
 
-  const marcador = (e) => {
+  const marcador = e => {
     console.log(e.nativeEvent.coordinate);
     setmarker([{ coordinate: e.nativeEvent.coordinate }]);
     //console.log(marker);
@@ -71,18 +71,19 @@ function MapShow() {
               latitudeDelta: latDelta,
               longitudeDelta: lonDelta
             }}
-            onPress={(e) => {
+            onPress={e => {
               marcador(e);
-            }}>
-            {marker.map((marker) => {
-              return <Marker {...marker} title='Parece falso'></Marker>;
+            }}
+          >
+            {marker.map(marker => {
+              return <Marker {...marker} title="Parece falso"></Marker>;
             })}
 
             {line ? (
               <Polyline
                 strokeWidth={6}
                 coordinates={line}
-                strokeColor='#000'
+                strokeColor="#000"
                 strokeColors={["#238C23", "#7F0000"]}
               />
             ) : null}
