@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, Dimensions, StyleSheet } from "react-native";
-<<<<<<< HEAD
 import MapView, { Marker, Polyline } from "react-native-maps";
-=======
-import MapView, { Marker } from "react-native-maps";
->>>>>>> 6d49974f4d13b0df962224298105380876c5c26b
+
 function MapShow() {
   const [long, setlong] = useState(null);
   const [lati, setlati] = useState(null);
@@ -17,7 +14,7 @@ function MapShow() {
   const [line, setline] = useState(null);
 
   const Location = () => {
-    navigator.geolocation.getCurrentPosition((position) => {
+    navigator.geolocation.getCurrentPosition(position => {
       const accuracy = position.coords.accuracy;
       const latitud = position.coords.latitude;
       const longitud = position.coords.longitude;
@@ -37,7 +34,7 @@ function MapShow() {
     setlonDelta(lonDelta);
   };
 
-  const marcador = (e) => {
+  const marcador = e => {
     console.log(e.nativeEvent.coordinate);
     setmarker([{ coordinate: e.nativeEvent.coordinate }]);
     console.log(marker);
@@ -66,18 +63,19 @@ function MapShow() {
               latitudeDelta: latDelta,
               longitudeDelta: lonDelta
             }}
-            onPress={(e) => {
+            onPress={e => {
               marcador(e);
-            }}>
-            {marker.map((marker) => {
-              return <Marker {...marker} title='Parece falso'></Marker>;
+            }}
+          >
+            {marker.map(marker => {
+              return <Marker {...marker} title="Parece falso"></Marker>;
             })}
 
             {line ? (
               <Polyline
                 strokeWidth={6}
                 coordinates={line}
-                strokeColor='#000'
+                strokeColor="#000"
                 strokeColors={["#238C23", "#7F0000"]}
               />
             ) : null}
