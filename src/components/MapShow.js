@@ -1,10 +1,6 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { View, Text, Dimensions, StyleSheet } from "react-native";
-<<<<<<< HEAD
 import MapView, { Marker, Polyline } from "react-native-maps";
-=======
-import MapView, { Marker } from "react-native-maps";
->>>>>>> 6d49974f4d13b0df962224298105380876c5c26b
 function MapShow() {
   const [long, setlong] = useState(null);
   const [lati, setlati] = useState(null);
@@ -24,9 +20,12 @@ function MapShow() {
       setlati(latitud);
       setlong(longitud);
       calcularDelta(longitud, latitud, accuracy);
+     //console.log(position.coords.longitude,position.coords.latitude);
     });
   };
+
   Location();
+
 
   const calcularDelta = (longitud, latitud, accuracy) => {
     const oneDegreeOfLongitudMeters = 111.32;
@@ -40,7 +39,7 @@ function MapShow() {
   const marcador = (e) => {
     console.log(e.nativeEvent.coordinate);
     setmarker([{ coordinate: e.nativeEvent.coordinate }]);
-    console.log(marker);
+    //console.log(marker);
     setline([
       { latitude: lati, longitude: long },
       {
@@ -49,7 +48,9 @@ function MapShow() {
       }
     ]);
   };
-
+  const change=(e)=>{
+    console.log(e.latitude,e.longitude);
+  }
   return (
     <View>
       <View style={styles.container}>
@@ -58,6 +59,10 @@ function MapShow() {
             style={styles.mapStyle}
             showsUserLocation
             followsUserLocation
+            
+            onUserLocationChange={(e)=>{
+              change(e.nativeEvent.coordinate);
+            }}
             loadingEnabled
             minZoomLevel={14}
             initialRegion={{
@@ -106,7 +111,7 @@ const styles = StyleSheet.create({
   },
   mapStyle: {
     width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height - 0
+    height: Dimensions.get("window").height 
   }
 });
 export default MapShow;

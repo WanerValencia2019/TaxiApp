@@ -2,7 +2,7 @@ import React from 'react'
 import { View, Text ,StyleSheet} from 'react-native'
 import HeaderC from "./../components/Header";
 import MapShow from "./../components/MapShow";
-
+import CodeScanner from "./../components/CodeScanner";
 function Service (props) {
     return (
         <View style={styles.container}>
@@ -10,6 +10,7 @@ function Service (props) {
         <View style={styles.containerMap}>
             <MapShow/>
         </View>
+        
         </View>
     )
 }
