@@ -27,7 +27,10 @@ function MapShow() {
   const [lati, setlati] = useState(null);
   const [error, setError] = useState("No hay coordenadas");
   const [region, setRegion] = useState(null);
-
+  const [marker, setmarker] = useState([
+    { coordinate: { latitude: 45.5209087, longitude: -122.6705107 } }
+  ]);
+  const [line, setline] = useState(null);
   useEffect(() => {
     console.log("paso por aqui \n");
     (async () => {
@@ -88,6 +91,19 @@ function MapShow() {
   const change=(e)=>{
     console.log(e.latitude,e.longitude);
   }
+  const marcador = e => {
+    console.log(e.nativeEvent.coordinate);
+    setmarker([{ coordinate: e.nativeEvent.coordinate }]);
+    //console.log(marker);
+  
+    setline([
+      { latitude: lati, longitude: long },
+      {
+        latitude: e.nativeEvent.coordinate.latitude,
+        longitude: e.nativeEvent.coordinate.longitude
+      }
+    ]);
+  };
   return (
     <View style={styles.container}>
       {region ? (
@@ -98,10 +114,25 @@ function MapShow() {
           loadingEnabled
           minZoomLevel={15}
           maxZoomLevel={20}
+          onPress={(e)=>{marcador(e)}}
           showsUserLocation={true}
           initialRegion={region}
-          region={region}
-        ></MapView>
+          region={region}      
+
+        > {marker.map(marker => {
+          return <Marker {...marker} title="Parece falso"></Marker>;
+        })}
+
+        {line ? (
+          <Polyline
+            strokeWidth={6}
+            coordinates={line}
+            strokeColor="#000"
+            strokeColors={["#238C23", "#7F0000"]}
+          />
+        ) : null}
+        
+        </MapView>
       ) : (
         <Text>{error}</Text>
       )}
