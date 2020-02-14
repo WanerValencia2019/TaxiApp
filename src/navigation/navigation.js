@@ -9,7 +9,7 @@ import Account from "./../screens/Account";
 import Info from "./../screens/Info";
 import Service from "./../screens/Service";
 import Travels from "./../screens/Travels";
-
+import StackServices from "./stacks/SServices";
 
 const Tabs=createBottomTabNavigator({
     Account:{
@@ -24,7 +24,7 @@ const Tabs=createBottomTabNavigator({
       }
     ,
     Service:{
-        screen:Service,
+        screen:StackServices,
         navigationOptions:{
             title:"Servicio",
             tabBarIcon:({tintColor})=>(
