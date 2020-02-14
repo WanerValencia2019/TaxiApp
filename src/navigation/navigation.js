@@ -9,6 +9,7 @@ import Account from "./../screens/Account";
 import Info from "./../screens/Info";
 import ServiceStack from "./../screens/Service";
 import Travels from "./../screens/Travels";
+import StackServices from "./stacks/SServices";
 
 const Tabs = createBottomTabNavigator(
   {
@@ -20,6 +21,20 @@ const Tabs = createBottomTabNavigator(
         tabBarIcon: ({ tintColor }) => (
           <Icon
             name="account-circle-outline"
+            type="material-community"
+            color={tintColor}
+            size={30}
+          />
+        )
+      }
+    },
+    Service: {
+      screen: StackServices,
+      navigationOptions: {
+        title: "Servicio",
+        tabBarIcon: ({ tintColor }) => (
+          <Icon
+            name="map-marker-plus"
             type="material-community"
             color={tintColor}
             size={30}

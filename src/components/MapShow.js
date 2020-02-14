@@ -25,7 +25,10 @@ const calcularDelta = (longitud, latitud, accuracy) => {
 function MapShow(props) {
   const [error, setError] = useState("No hay coordenadas");
   const [region, setRegion] = useState(null);
-
+  const [marker, setmarker] = useState([
+    { coordinate: { latitude: 45.5209087, longitude: -122.6705107 } }
+  ]);
+  const [line, setline] = useState(null);
   useEffect(() => {
     (async () => {
       let { status } = await Permissions.askAsync(Permissions.LOCATION);
@@ -67,6 +70,20 @@ function MapShow(props) {
     })();
   }, []);
 
+  const marcador = e => {
+    console.log(e.nativeEvent.coordinate);
+    setmarker([{ coordinate: e.nativeEvent.coordinate }]);
+    //console.log(marker);
+
+    setline([
+      { latitude: lati, longitude: long },
+      {
+        latitude: e.nativeEvent.coordinate.latitude,
+        longitude: e.nativeEvent.coordinate.longitude
+      }
+    ]);
+  };
+
   const onUserPostionChange = coordinate => {
     const { latitude, longitude } = coordinate;
     console.log(`Nuevas coordenadas, lon:${longitude}, lati:${latitude}`);
@@ -92,7 +109,23 @@ function MapShow(props) {
             showsUserLocation={true}
             initialRegion={region}
             region={region}
-          ></MapView>
+            onPress={e => {
+              marcador(e);
+            }}
+          >
+            >{" "}
+            {marker.map(marker => {
+              return <Marker {...marker} title="Parece falso"></Marker>;
+            })}
+            {line ? (
+              <Polyline
+                strokeWidth={6}
+                coordinates={line}
+                strokeColor="#000"
+                strokeColors={["#238C23", "#7F0000"]}
+              />
+            ) : null}
+          </MapView>
           <View
             style={{
               flex: 1,

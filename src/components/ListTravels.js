@@ -5,7 +5,6 @@ import { Icon } from "react-native-elements";
 
 const ListItem = ({ rutaInicio, rutaFinal, taxista }) => {
   return (
-    <>
       <View
         style={{
           display: "flex",
@@ -48,7 +47,7 @@ const ListItem = ({ rutaInicio, rutaFinal, taxista }) => {
         </Text>
         <Button color="#303248" title=" Ver detalles"></Button>
       </View>
-    </>
+   
   );
 };
 
