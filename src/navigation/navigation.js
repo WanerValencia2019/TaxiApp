@@ -1,5 +1,5 @@
-import React from 'react';
-import { createBottomTabNavigator } from "react-navigation-tabs"
+import React from "react";
+import { createBottomTabNavigator } from "react-navigation-tabs";
 import { createDrawerNavigator } from "react-navigation-drawer";
 import { Icon } from "react-native-elements";
 import { Text, TouchableOpacity } from "react-native";
@@ -33,18 +33,37 @@ const Tabs=createBottomTabNavigator({
         }
       }
     ,
-    Travels:{
-        screen:Travels,
-        navigationOptions:{
-            title:"Mis rutas",
-            tabBarIcon:({tintColor})=>(
-                <Icon name="map-marker-path" type="material-community" color={tintColor} size={30} />
-            )
-        }
+    Service: {
+      screen: Service,
+      navigationOptions: {
+        title: "Servicio",
+        tabBarIcon: ({ tintColor }) => (
+          <Icon
+            name="map-marker-plus"
+            type="material-community"
+            color={tintColor}
+            size={30}
+          />
+        )
+     } }
+    ,
+    Travels: {
+      screen: Travels,
+      navigationOptions: {
+        title: "Mis rutas",
+        tabBarIcon: ({ tintColor }) => (
+          <Icon
+            name="map-marker-path"
+            type="material-community"
+            color={tintColor}
+            size={30}
+          />
+        )
       }
-    },
-  {
-    initialRouteName: "Service",
+    }
+  } 
+    ,{  
+    initialRouteName: "Travels",
     order: ["Service", "Travels", "Account"],
     tabBarOptions: {
       inactiveTintColor: "#fff",
@@ -52,6 +71,7 @@ const Tabs=createBottomTabNavigator({
       tabStyle: { backgroundColor: "#303248" }
     }
   }
+
 );
 const DrawerNavigator = createDrawerNavigator(
   {
