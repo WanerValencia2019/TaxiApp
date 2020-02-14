@@ -6,7 +6,6 @@ import { Container, Text, CardItem, Left, Thumbnail, Body } from "native-base";
 
 const imagenUsuario = require("../../assets/adorable.png");
 function SideBar(props) {
-  console.log(props.descriptors.Home);
   return (
     <Container style={{ marginTop: 24 }}>
       <CardItem style={styles.CardItem}>
