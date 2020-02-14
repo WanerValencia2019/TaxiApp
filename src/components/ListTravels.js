@@ -78,8 +78,9 @@ const recorridos = [
 const ListTravels = () => {
   return (
     <ScrollView automaticallyAdjustContentInsets={false}>
-      {recorridos.map(recorrido => (
+      {recorridos.map((recorrido, i) => (
         <ListItem
+          key={i}
           rutaInicio={recorrido.rutaInicio}
           rutaFinal={recorrido.rutaFinal}
           taxista={recorrido.taxista}
