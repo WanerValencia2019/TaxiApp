@@ -1,13 +1,13 @@
 import React from "react";
 import { createBottomTabNavigator } from "react-navigation-tabs";
 import { createDrawerNavigator } from "react-navigation-drawer";
+import { createStackNavigator } from "react-navigation-stack";
 import { Icon } from "react-native-elements";
-import { Text, TouchableOpacity } from "react-native";
 import SideBar from "./../components/sideBar";
 
 import Account from "./../screens/Account";
 import Info from "./../screens/Info";
-import Service from "./../screens/Service";
+import ServiceStack from "./../screens/Service";
 import Travels from "./../screens/Travels";
 
 const Tabs = createBottomTabNavigator(
@@ -28,7 +28,7 @@ const Tabs = createBottomTabNavigator(
       }
     },
     Service: {
-      screen: Service,
+      screen: ServiceStack,
       navigationOptions: {
         title: "Servicio",
         tabBarIcon: ({ tintColor }) => (
@@ -57,7 +57,7 @@ const Tabs = createBottomTabNavigator(
     }
   },
   {
-    initialRouteName: "Travels",
+    initialRouteName: "Service",
     order: ["Service", "Travels", "Account"],
     tabBarOptions: {
       inactiveTintColor: "#fff",
@@ -66,6 +66,7 @@ const Tabs = createBottomTabNavigator(
     }
   }
 );
+
 const DrawerNavigator = createDrawerNavigator(
   {
     Home: {
@@ -89,11 +90,4 @@ const DrawerNavigator = createDrawerNavigator(
   }
 );
 
-/*const StackNavigator = createStackNavigator({
-    DrawerNavigator:{
-        screen: DrawerNavigator
-    }
-},{
-    
-}); */
 export default DrawerNavigator;

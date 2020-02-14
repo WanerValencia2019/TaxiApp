@@ -22,14 +22,11 @@ const calcularDelta = (longitud, latitud, accuracy) => {
   };
 };
 
-function MapShow() {
-  const [long, setlong] = useState(null);
-  const [lati, setlati] = useState(null);
+function MapShow(props) {
   const [error, setError] = useState("No hay coordenadas");
   const [region, setRegion] = useState(null);
 
   useEffect(() => {
-    console.log("paso por aqui \n");
     (async () => {
       let { status } = await Permissions.askAsync(Permissions.LOCATION);
       if (status !== "granted") {
@@ -57,27 +54,21 @@ function MapShow() {
         });
         console.log(region);
 
-        const unsubcribe = await Location.watchPositionAsync(
+        removerWacth = await Location.watchPositionAsync(
           { distanceInterval: 1, timeInterval: 1000 },
-          position => {
-            /*
-            const { latitude, longitude } = position.coords;
-            setRegion({
-              latitude,
-              longitude,
-              latitudeDelta: latDelta,
-              longitudeDelta: lonDelta
-            });
-            */
-          }
+          position => {}
         );
+
+        return () => {
+          removerWacth.remove();
+          console.log("se esta desmontando");
+        };
       }
     })();
   }, []);
 
-  const onUserPostionChange = e => {
-    const { latitude, longitude } = e.nativeEvent.coordinate;
-    console.log("cambio la posicion");
+  const onUserPostionChange = coordinate => {
+    const { latitude, longitude } = coordinate;
     console.log(`Nuevas coordenadas, lon:${longitude}, lati:${latitude}`);
     setRegion({
       ...region,
@@ -85,47 +76,49 @@ function MapShow() {
       longitude
     });
   };
-  const change=(e)=>{
-    console.log(e.latitude,e.longitude);
-  }
   return (
     <View style={styles.container}>
       {region ? (
-        <MapView
-          onUserLocationChange={e => onUserPostionChange(e)}
-          style={styles.mapStyle}
-          followsUserLocation
-          loadingEnabled
-          minZoomLevel={15}
-          maxZoomLevel={20}
-          showsUserLocation={true}
-          initialRegion={region}
-          region={region}
-        ></MapView>
+        <>
+          <MapView
+            onUserLocationChange={e =>
+              onUserPostionChange(e.nativeEvent.coordinate)
+            }
+            style={styles.mapStyle}
+            followsUserLocation
+            loadingEnabled
+            minZoomLevel={15}
+            maxZoomLevel={20}
+            showsUserLocation={true}
+            initialRegion={region}
+            region={region}
+          ></MapView>
+          <View
+            style={{
+              flex: 1,
+              position: "absolute",
+              bottom: 0,
+              left: "5%",
+              backgroundColor: "#303248",
+              borderRadius: 20,
+              padding: 16,
+              opacity: 0.98
+            }}
+          >
+            <TouchableHighlight
+              onPress={e => {
+                props.inicarCarrera("RutaDestino", {
+                  cordenadas: JSON.stringify(region)
+                });
+              }}
+            >
+              <Text style={{ color: "yellow" }}>Iniciar Carrera</Text>
+            </TouchableHighlight>
+          </View>
+        </>
       ) : (
         <Text>{error}</Text>
       )}
-
-      <View
-        style={{
-          flex: 1,
-          position: "absolute",
-          bottom: "20%",
-          left: "5%",
-          backgroundColor: "#303248",
-          borderRadius: 20,
-          padding: 13,
-          opacity: 1
-        }}
-      >
-        <TouchableHighlight
-          onPress={e => {
-            alert(JSON.stringify(region));
-          }}
-        >
-          <Text style={{ color: "yellow" }}>Mi nuevo boton</Text>
-        </TouchableHighlight>
-      </View>
     </View>
   );
 }

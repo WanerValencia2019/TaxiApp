@@ -1,30 +1,51 @@
-import React from 'react'
-import { View, Text ,StyleSheet} from 'react-native'
+import React from "react";
+import { View, StyleSheet, Text, Button } from "react-native";
+import { createStackNavigator } from "react-navigation-stack";
 import HeaderC from "./../components/Header";
 import MapShow from "./../components/MapShow";
 import CodeScanner from "./../components/CodeScanner";
-function Service (props) {
-    return (
-        <View style={styles.container}>
-        <HeaderC navigation={props.navigation} />
-        <View style={styles.containerMap}>
-            <MapShow/>
-        </View>
-        
-        </View>
-    )
+
+function RutaDestino(props) {
+  return <CodeScanner />;
 }
-const styles = StyleSheet.create({
-    container: {
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginTop:46
-      
+
+function Service(props) {
+  return (
+    <View style={styles.container}>
+      <View style={styles.containerMap}>
+        <MapShow inicarCarrera={props.navigation.navigate} />
+        <Button
+          title="Ir a servicios"
+          onPress={() => props.navigation.navigate("RutaDestino")}
+        />
+      </View>
+    </View>
+  );
+}
+
+const ServiceStack = createStackNavigator(
+  {
+    Service: {
+      screen: Service,
+      navigationOptions: {
+        header: props => <HeaderC {...props} navifation={props.navigation} />
+      }
     },
-    containerMap:{
+    RutaDestino: {
+      screen: RutaDestino
     }
+  },
+  {
+    initialRouteName: "RutaDestino"
+  }
+);
 
-  });
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center"
+  }
+});
 
-export default Service;
+export default ServiceStack;
