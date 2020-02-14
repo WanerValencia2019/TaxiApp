@@ -85,7 +85,9 @@ function MapShow() {
       longitude
     });
   };
-
+  const change=(e)=>{
+    console.log(e.latitude,e.longitude);
+  }
   return (
     <View style={styles.container}>
       {region ? (
