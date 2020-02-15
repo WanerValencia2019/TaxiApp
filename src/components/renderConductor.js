@@ -1,14 +1,23 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { Card } from "react-native-elements";
+import { Card, Button } from "react-native-elements";
 function Conductor(props) {
   const si = true;
-  const { info } = props;
-  console.log(info);
+  const carrera = props.navigation.getParam("carrera");
+
+  const { info, cordenadas } = carrera;
 
   return (
     <View style={styles.container}>
-    <Card containerStyle={{width:"100%", marginTop:24,marginLeft:10,marginRight:10}} title={"Información del conductor"}>
+      <Card
+        containerStyle={{
+          width: "100%",
+          marginTop: 24,
+          marginLeft: 10,
+          marginRight: 10
+        }}
+        title={"Información del conductor"}
+      >
         <Text>
           <Text style={styles.bold}>Nombre: </Text>
           {info.name}
@@ -22,14 +31,36 @@ function Conductor(props) {
           {info.cc}
         </Text>
         <Text>
-        <Text style={styles.bold}>Empresa: </Text>
-        {info.company}
-      </Text>
-      <Text>
-        <Text style={styles.bold}>Valoración(0-10): </Text>
-        {info.rating}
-      </Text>
-    </Card>
+          <Text style={styles.bold}>Empresa: </Text>
+          {info.company}
+        </Text>
+        <Text>
+          <Text style={styles.bold}>Valoración(0-10): </Text>
+          {info.rating}
+        </Text>
+
+        <Text>{JSON.stringify(cordenadas)}</Text>
+
+        <Button
+          style={{ marginTop: 10 }}
+          title="Aceptar"
+          primary
+          type="outline"
+          onPress={() => {
+            alert(`
+                info: ${JSON.stringify(info)}
+                cordenadas: ${JSON.stringify(cordenadas)}
+              `);
+
+            props.navigation.navigate("MapRace", {
+              carrera: {
+                conductor: info,
+                cordenadas: cordenadas
+              }
+            });
+          }}
+        />
+      </Card>
     </View>
   );
 }

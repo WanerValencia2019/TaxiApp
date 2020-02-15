@@ -7,9 +7,10 @@ import {
   TouchableHighlight
 } from "react-native";
 import MapView, { Marker, Polyline } from "react-native-maps";
-const { width, height } = Dimensions.get("window");
+const { width, height } = Dimensions.get("screen");
 import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
+import MapRace from "./MapRace";
 
 const calcularDelta = (longitud, latitud, accuracy) => {
   const oneDegreeOfLongitudMeters = 111.32;
@@ -23,11 +24,14 @@ const calcularDelta = (longitud, latitud, accuracy) => {
 };
 
 function MapShow(props) {
+  const { conductor, cordenadas, navigation } = props;
+  if (conductor) {
+    return <MapRace conductor={conductor} cordenadas={cordenadas} />;
+  }
+
   const [error, setError] = useState("No hay coordenadas");
   const [region, setRegion] = useState(null);
-  const [marker, setmarker] = useState([
-    { coordinate: { latitude: 45.5209087, longitude: -122.6705107 } }
-  ]);
+  const [marker, setmarker] = useState([]);
   const [line, setline] = useState(null);
   useEffect(() => {
     (async () => {
@@ -58,7 +62,7 @@ function MapShow(props) {
         console.log(region);
 
         removerWacth = await Location.watchPositionAsync(
-          { distanceInterval: 1, timeInterval: 1000 },
+          { distanceInterval: 5, timeInterval: 100000 },
           position => {}
         );
 
@@ -70,22 +74,21 @@ function MapShow(props) {
     })();
   }, []);
 
-  const marcador = e => {
-    console.log(e.nativeEvent.coordinate);
-    setmarker([{ coordinate: e.nativeEvent.coordinate }]);
+  const ponerMarcador = coordinate => {
+    setmarker([{ coordinate }]);
     //console.log(marker);
-
+    const { latitude, longitude } = region;
     setline([
-      { latitude: lati, longitude: long },
+      { latitude, longitude },
       {
-        latitude: e.nativeEvent.coordinate.latitude,
-        longitude: e.nativeEvent.coordinate.longitude
+        latitude: coordinate.latitude,
+        longitude: coordinate.longitude
       }
     ]);
   };
 
-  const onUserPostionChange = coordinate => {
-    const { latitude, longitude } = coordinate;
+  const onUserPostionChange = cordinate => {
+    const { latitude, longitude } = cordinate;
     console.log(`Nuevas coordenadas, lon:${longitude}, lati:${latitude}`);
     setRegion({
       ...region,
@@ -93,6 +96,7 @@ function MapShow(props) {
       longitude
     });
   };
+
   return (
     <View style={styles.container}>
       {region ? (
@@ -110,18 +114,18 @@ function MapShow(props) {
             initialRegion={region}
             region={region}
             onPress={e => {
-              marcador(e);
+              ponerMarcador(e.nativeEvent.coordinate);
             }}
           >
-            >{" "}
             {marker.map(marker => {
-              return <Marker {...marker} title="Parece falso"></Marker>;
+              return <Marker {...marker} title="Lugar Destino"></Marker>;
             })}
+
             {line ? (
               <Polyline
-                strokeWidth={6}
+                strokeWidth={3}
                 coordinates={line}
-                strokeColor="#000"
+                strokeColor="gray"
                 strokeColors={["#238C23", "#7F0000"]}
               />
             ) : null}
@@ -140,8 +144,24 @@ function MapShow(props) {
           >
             <TouchableHighlight
               onPress={e => {
-                props.inicarCarrera("RutaDestino", {
-                  cordenadas: JSON.stringify(region)
+                if (!marker.length) {
+                  alert("Debes Seleccionar un lugar de destino");
+                  return;
+                }
+                navigation.navigate("RutaDestino", {
+                  cordenadas: [
+                    {
+                      ...region,
+                      title: "Recogida",
+                      descripcion: "Lugar de inicio"
+                    },
+
+                    {
+                      ...marker[0],
+                      title: "Destino",
+                      descripcion: "Lugar de llegada"
+                    }
+                  ]
                 });
               }}
             >
