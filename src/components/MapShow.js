@@ -59,7 +59,7 @@ function MapShow(props) {
           latitudeDelta: latDelta,
           longitudeDelta: lonDelta
         });
-        console.log(region);
+        //console.log(region);
 
         removerWacth = await Location.watchPositionAsync(
           { distanceInterval: 5, timeInterval: 100000 },
@@ -77,6 +77,8 @@ function MapShow(props) {
   const ponerMarcador = coordinate => {
     setmarker([{ coordinate }]);
     //console.log(marker);
+    const marcador=marker[0];
+    console.log(marcador);
     const { latitude, longitude } = region;
     setline([
       { latitude, longitude },
@@ -89,7 +91,7 @@ function MapShow(props) {
 
   const onUserPostionChange = cordinate => {
     const { latitude, longitude } = cordinate;
-    console.log(`Nuevas coordenadas, lon:${longitude}, lati:${latitude}`);
+    //console.log(`Nuevas coordenadas, lon:${longitude}, lati:${latitude}`);
     setRegion({
       ...region,
       latitude,
@@ -157,9 +159,12 @@ function MapShow(props) {
                     },
 
                     {
-                      ...marker[0],
+                      ...marker[0].coordinate,
                       title: "Destino",
                       descripcion: "Lugar de llegada"
+                    },
+                    {
+                      ruta:line
                     }
                   ]
                 });

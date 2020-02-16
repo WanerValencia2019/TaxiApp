@@ -22,8 +22,14 @@ const { width, height } = Dimensions.get("window");
 
 function MapRace(props) {
   const [error, setError] = useState("No hay coordenadas");
-  const { carrera } = props;
-  const { conducor, cordenadas } = carrera;
+  
+  const { carrera} = props.navigation.state.params;
+  const [marcador, setmarcador] = useState([carrera.cordenadas[1]]);
+  const ruta=carrera.cordenadas[2].ruta;
+console.log(carrera);
+ console.log();
+  const cordenadas=carrera.cordenadas[0];
+  
   const [region, setRegion] = useState({
     latitude: cordenadas.latitude,
     longitude: cordenadas.longitude,
@@ -33,21 +39,8 @@ function MapRace(props) {
 
   useEffect(() => {
     (async () => {
-      let { status } = await Permissions.askAsync(Permissions.LOCATION);
-      if (status !== "granted") {
-        setError("Permission to access location was denied");
-        return;
-      }
-      if (status == "granted") {
-        let location = await Location.getCurrentPositionAsync({});
-
-        const { latitude, longitude, accuracy } = location.coords;
-
-        const { lonDelta, latDelta } = calcularDelta(
-          longitude,
-          latitude,
-          accuracy
-        );
+        navigator.geolocation.getCurrentPosition((position )=>{
+          const { latitude, longitude, accuracy } = position.coords;
 
         setRegion({
           latitude,
@@ -55,23 +48,20 @@ function MapRace(props) {
           latitudeDelta: latDelta,
           longitudeDelta: lonDelta
         });
-
-        removerWacth = await Location.watchPositionAsync(
-          { distanceInterval: 5, timeInterval: 100000 },
-          position => {}
+        const { lonDelta, latDelta } = calcularDelta(
+          longitude,
+          latitude,
+          accuracy
         );
+        })
 
-        return () => {
-          removerWacth.remove();
-          console.log("se esta desmontando");
-        };
-      }
+      
     })();
   }, []);
 
   const onUserPostionChange = coordinate => {
     const { latitude, longitude } = coordinate;
-    console.log(`Nuevas coordenadas, lon:${longitude}, lati:${latitude}`);
+    //console.log(`Nuevas coordenadas, lon:${longitude}, lati:${latitude}`);
     setRegion({
       ...region,
       latitude,
@@ -96,11 +86,19 @@ function MapRace(props) {
             initialRegion={region}
             region={region}
           >
-            {carrera.cordenadas.map((marker, i) => {
+            {marcador.map((marker, i) => {
               return (
-                <Marker key={i} {...marker} title="Lugar Destino"></Marker>
+                <Marker key={i} coordinate={{longitude:marker.longitude,latitude:marker.latitude}} title="Lugar Destino"></Marker>
               );
             })}
+            {ruta ? (
+              <Polyline
+                strokeWidth={10}
+                coordinates={ruta}
+                strokeColor="rgba(80,255,235,.5)"
+                strokeColors={["#238C23", "#7F0000"]}
+              />
+            ) : null}
           </MapView>
           <View
             style={{
@@ -114,7 +112,7 @@ function MapRace(props) {
               opacity: 0.98
             }}
           >
-            <TouchableHighlight>
+            <TouchableHighlight >
               <Text style={{ color: "yellow" }}> Panico</Text>
             </TouchableHighlight>
             <TouchableHighlight>
@@ -125,6 +123,7 @@ function MapRace(props) {
             </TouchableHighlight>
           </View>
         </>
+        
       ) : (
         <Text> no llego nada</Text>
       )}
@@ -133,7 +132,6 @@ function MapRace(props) {
 }
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "flex-start"

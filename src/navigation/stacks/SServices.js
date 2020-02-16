@@ -1,4 +1,4 @@
-import React from 'react'
+/*import React from 'react'
 import { createSwitchNavigator } from "react-navigation";
 import Service from "./../../screens/Service";
 import CodeScanner from "./../../components/CodeScanner";
@@ -18,4 +18,4 @@ const StackServices=createSwitchNavigator({
 
 
  
-export default StackServices;
+export default StackServices;*/

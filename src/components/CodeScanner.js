@@ -26,7 +26,7 @@ export default function CodeScanner(props) {
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
     const id = String(data);
-    console.log(id);
+    //console.log(id);
     conductores.forEach(value => {
       if (value.id == String(id)) {
         setinfoCondutor({
@@ -121,7 +121,8 @@ export default function CodeScanner(props) {
     return props.navigation.navigate("CoductorView", {
       carrera: {
         info: infoConductor,
-        cordenadas: props.cordenadas
+        cordenadas: props.cordenadas,
+        
       }
     });
   }

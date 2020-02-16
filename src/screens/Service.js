@@ -1,6 +1,7 @@
 import React from "react";
 import { View, StyleSheet, Text } from "react-native";
 import { createStackNavigator } from "react-navigation-stack";
+
 import HeaderC from "./../components/Header";
 import MapShow from "./../components/MapShow";
 import CodeScanner from "./../components/CodeScanner";
@@ -33,7 +34,7 @@ function RenderRace(props) {
   const carrera = props.navigation.getParam("carrera");
   return (
     <View>
-      <MapRace carrera={carrera} />
+      <MapRace carrera={carrera} navigation={props.navigation} />
     </View>
   );
 }
@@ -43,7 +44,7 @@ function CoductorView(props) {
 
   const { info, cordenadas } = carrera;
 
-  return <Conductor info={info} cordenadas={cordenadas} />;
+  return <Conductor info={info} navigation={props.navigation} carrera={carrera} />;
 }
 
 const ServiceStack = createStackNavigator(
@@ -51,7 +52,7 @@ const ServiceStack = createStackNavigator(
     Service: {
       screen: Service,
       navigationOptions: {
-        header: props => <HeaderC {...props} navifation={props.navigation} />
+        header: props => <HeaderC {...props} navigation={props.navigation} />
       }
     },
     ConductorScanner: {
@@ -61,7 +62,11 @@ const ServiceStack = createStackNavigator(
       screen: RenderRace
     },
     CoductorView: {
-      screen: CoductorView
+      screen: CoductorView,
+      navigationOptions:{
+        title:"Conductor",
+        headerShown:false
+      }
     }
   },
   {

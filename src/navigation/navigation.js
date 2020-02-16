@@ -28,7 +28,7 @@ const Tabs = createBottomTabNavigator(
         )
       }
     },
-    Service: {
+    /*Service: {
       screen: StackServices,
       navigationOptions: {
         title: "Servicio",
@@ -41,7 +41,7 @@ const Tabs = createBottomTabNavigator(
           />
         )
       }
-    },
+    },*/
     Service: {
       screen: ServiceStack,
       navigationOptions: {

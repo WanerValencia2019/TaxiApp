@@ -6,9 +6,8 @@ import FOTO_CONDUCTOR from "../../assets/conductorExample.jpg";
 
 function Conductor(props) {
   const si = true;
-
-  const { info, cordenadas } = props;
-
+  const { info, navigation,carrera } = props;
+  //console.log(props);
   return (
     <View style={styles.container}>
       <Card
@@ -61,10 +60,7 @@ function Conductor(props) {
           full
           style={{ padding: 10, borderRadius: 15 }}
           onPress={() => {
-            alert(`
-            info: ${JSON.stringify(info)}
-            cordenadas: ${JSON.stringify(cordenadas)}
-          `);
+           navigation.navigate('MapRace',{"carrera":carrera});
           }}
         >
           <Text
@@ -102,7 +98,8 @@ function Conductor(props) {
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: "center"
+    alignItems: "center",
+    marginTop:24
   },
   bold: {
     margin: 10,
