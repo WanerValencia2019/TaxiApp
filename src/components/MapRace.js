@@ -7,10 +7,6 @@ import {
   TouchableHighlight
 } from "react-native";
 import MapView, { Marker, Polyline } from "react-native-maps";
-const { width, height } = Dimensions.get("screen");
-import * as Location from "expo-location";
-import * as Permissions from "expo-permissions";
-import MapRace from "./MapRace";
 
 const calcularDelta = (longitud, latitud, accuracy) => {
   const oneDegreeOfLongitudMeters = 111.32;
@@ -22,17 +18,19 @@ const calcularDelta = (longitud, latitud, accuracy) => {
     lonDelta
   };
 };
+const { width, height } = Dimensions.get("window");
 
-function MapShow(props) {
-  const { conductor, cordenadas, navigation } = props;
-  if (conductor) {
-    return <MapRace conductor={conductor} cordenadas={cordenadas} />;
-  }
-
+function MapRace(props) {
   const [error, setError] = useState("No hay coordenadas");
-  const [region, setRegion] = useState(null);
-  const [marker, setmarker] = useState([]);
-  const [line, setline] = useState(null);
+  const { carrera } = props;
+  const { conducor, cordenadas } = carrera;
+  const [region, setRegion] = useState({
+    latitude: cordenadas.latitude,
+    longitude: cordenadas.longitude,
+    latitudeDelta: cordenadas.latitudeDelta,
+    longitudeDelta: cordenadas.longitudeDelta
+  });
+
   useEffect(() => {
     (async () => {
       let { status } = await Permissions.askAsync(Permissions.LOCATION);
@@ -42,8 +40,6 @@ function MapShow(props) {
       }
       if (status == "granted") {
         let location = await Location.getCurrentPositionAsync({});
-        location.coords.accuracy;
-        location.coords;
 
         const { latitude, longitude, accuracy } = location.coords;
 
@@ -59,7 +55,6 @@ function MapShow(props) {
           latitudeDelta: latDelta,
           longitudeDelta: lonDelta
         });
-        console.log(region);
 
         removerWacth = await Location.watchPositionAsync(
           { distanceInterval: 5, timeInterval: 100000 },
@@ -74,21 +69,8 @@ function MapShow(props) {
     })();
   }, []);
 
-  const ponerMarcador = coordinate => {
-    setmarker([{ coordinate }]);
-    //console.log(marker);
-    const { latitude, longitude } = region;
-    setline([
-      { latitude, longitude },
-      {
-        latitude: coordinate.latitude,
-        longitude: coordinate.longitude
-      }
-    ]);
-  };
-
-  const onUserPostionChange = cordinate => {
-    const { latitude, longitude } = cordinate;
+  const onUserPostionChange = coordinate => {
+    const { latitude, longitude } = coordinate;
     console.log(`Nuevas coordenadas, lon:${longitude}, lati:${latitude}`);
     setRegion({
       ...region,
@@ -99,7 +81,7 @@ function MapShow(props) {
 
   return (
     <View style={styles.container}>
-      {region ? (
+      {carrera ? (
         <>
           <MapView
             onUserLocationChange={e =>
@@ -113,22 +95,12 @@ function MapShow(props) {
             showsUserLocation={true}
             initialRegion={region}
             region={region}
-            onPress={e => {
-              ponerMarcador(e.nativeEvent.coordinate);
-            }}
           >
-            {marker.map(marker => {
-              return <Marker {...marker} title="Lugar Destino"></Marker>;
+            {carrera.cordenadas.map((marker, i) => {
+              return (
+                <Marker key={i} {...marker} title="Lugar Destino"></Marker>
+              );
             })}
-
-            {line ? (
-              <Polyline
-                strokeWidth={3}
-                coordinates={line}
-                strokeColor="gray"
-                strokeColors={["#238C23", "#7F0000"]}
-              />
-            ) : null}
           </MapView>
           <View
             style={{
@@ -142,35 +114,19 @@ function MapShow(props) {
               opacity: 0.98
             }}
           >
-            <TouchableHighlight
-              onPress={e => {
-                if (!marker.length) {
-                  alert("Debes Seleccionar un lugar de destino");
-                  return;
-                }
-                navigation.navigate("ConductorScanner", {
-                  cordenadas: [
-                    {
-                      ...region,
-                      title: "Recogida",
-                      descripcion: "Lugar de inicio"
-                    },
-
-                    {
-                      ...marker[0],
-                      title: "Destino",
-                      descripcion: "Lugar de llegada"
-                    }
-                  ]
-                });
-              }}
-            >
-              <Text style={{ color: "yellow" }}>Iniciar Carrera</Text>
+            <TouchableHighlight>
+              <Text style={{ color: "yellow" }}> Panico</Text>
+            </TouchableHighlight>
+            <TouchableHighlight>
+              <Text style={{ color: "yellow" }}>
+                {" "}
+                Ver informacion conductor
+              </Text>
             </TouchableHighlight>
           </View>
         </>
       ) : (
-        <Text>{error}</Text>
+        <Text> no llego nada</Text>
       )}
     </View>
   );
@@ -187,4 +143,15 @@ const styles = StyleSheet.create({
     height
   }
 });
-export default MapShow;
+export default MapRace;
+
+/*{!carrera.cordenadas ? (
+    <Polyline
+      strokeWidth={3}
+      coordinates={carrera.cordenadas}
+      strokeColor="gray"
+      strokeColors={["#238C23", "#7F0000"]}
+    />
+  ) : null}
+
+  */

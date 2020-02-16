@@ -16,7 +16,7 @@ const Container = createAppContainer(
       }
     },
     {
-      initialRouteName: "Inicio"
+      initialRouteName: "Login"
     }
   )
 );
