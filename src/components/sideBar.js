@@ -2,15 +2,14 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import { Divider, Avatar } from "react-native-elements";
 import { DrawerItems } from "react-navigation-drawer";
-import { Container, Text, CardItem, Left, Thumbnail, Body } from "native-base";
-
-const imagenUsuario = require("../../assets/adorable.png");
+import { Container, Text, CardItem, Left, Body } from "native-base";
+import userImagen from "../../assets/userExample.jpeg";
 function SideBar(props) {
   return (
     <Container style={{ marginTop: 24 }}>
       <CardItem style={styles.CardItem}>
         <Left>
-          <Avatar source={imagenUsuario} size="large" rounded />
+          <Avatar source={userImagen} size="large" rounded />
           <Body style={{ marginHorizontal: 10 }}>
             <Text style={{ color: "white", fontSize: 16, marginBottom: 10 }}>
               Yoiler cordoba{" "}

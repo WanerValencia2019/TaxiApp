@@ -148,7 +148,7 @@ function MapShow(props) {
                   alert("Debes Seleccionar un lugar de destino");
                   return;
                 }
-                navigation.navigate("RutaDestino", {
+                navigation.navigate("ConductorScanner", {
                   cordenadas: [
                     {
                       ...region,

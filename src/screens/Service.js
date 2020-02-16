@@ -7,7 +7,7 @@ import CodeScanner from "./../components/CodeScanner";
 import Conductor from "./../components/renderConductor";
 import MapRace from "../components/MapRace";
 
-function RutaDestino(props) {
+function ConductorScanner(props) {
   const { navigation } = props;
   const cordenadas = props.navigation.getParam("cordenadas");
   return (
@@ -19,9 +19,6 @@ function RutaDestino(props) {
 
 function Service(props) {
   const carrera = props.navigation.getParam("carrera");
-  if (carrera) {
-    <MapRace />;
-  }
   const { navigation } = props;
   return (
     <View style={styles.container}>
@@ -41,12 +38,12 @@ function RenderRace(props) {
   );
 }
 
-function ExampleComponent() {
-  return (
-    <View>
-      <Text>HOla world</Text>
-    </View>
-  );
+function CoductorView(props) {
+  const carrera = props.navigation.getParam("carrera");
+
+  const { info, cordenadas } = carrera;
+
+  return <Conductor info={info} cordenadas={cordenadas} />;
 }
 
 const ServiceStack = createStackNavigator(
@@ -57,17 +54,14 @@ const ServiceStack = createStackNavigator(
         header: props => <HeaderC {...props} navifation={props.navigation} />
       }
     },
-    RutaDestino: {
-      screen: RutaDestino
+    ConductorScanner: {
+      screen: ConductorScanner
     },
     MapRace: {
       screen: RenderRace
     },
     CoductorView: {
-      screen: Conductor
-    },
-    Example: {
-      screen: ExampleComponent
+      screen: CoductorView
     }
   },
   {
