@@ -1,7 +1,7 @@
 import React from "react";
 import { View, StyleSheet, Text } from "react-native";
 import { createStackNavigator } from "react-navigation-stack";
-
+import { Icon } from "react-native-elements";
 import HeaderC from "./../components/Header";
 import MapShow from "./../components/MapShow";
 import CodeScanner from "./../components/CodeScanner";
@@ -59,7 +59,14 @@ const ServiceStack = createStackNavigator(
       screen: ConductorScanner
     },
     MapRace: {
-      screen: RenderRace
+      screen: RenderRace,
+      navigationOptions:{
+        headerTitle:"Taxi Secure",
+        headerTitleAlign:"center",
+        headerTitleStyle:{fontSize:20},
+        headerLeft:false,
+ 
+      }
     },
     CoductorView: {
       screen: CoductorView,

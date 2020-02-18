@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, Text } from "react-native";
 import { ListItem} from "react-native-elements";
-import Modal from "./overlayOptions"
+import Modal from "./Modal"
 
 //import PasswordChange from "./passwordCHange";
 //import EmailChange from "./emailChange";

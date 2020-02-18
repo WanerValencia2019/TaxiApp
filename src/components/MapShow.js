@@ -4,7 +4,8 @@ import {
   Text,
   Dimensions,
   StyleSheet,
-  TouchableHighlight
+  TouchableHighlight,
+  Header
 } from "react-native";
 import MapView, { Marker, Polyline } from "react-native-maps";
 const { width, height } = Dimensions.get("screen");
@@ -75,7 +76,7 @@ function MapShow(props) {
   }, []);
 
   const ponerMarcador = coordinate => {
-    setmarker([{ coordinate }]);
+    setmarker([{ coordinate,"inicio":region }]);
     //console.log(marker);
     const marcador=marker[0];
     console.log(marcador);
@@ -154,12 +155,13 @@ function MapShow(props) {
                   cordenadas: [
                     {
                       ...region,
-                      title: "Recogida",
-                      descripcion: "Lugar de inicio"
+                      title: "Destino",
+                      descripcion: "Lugar de arrivo"
                     },
 
                     {
                       ...marker[0].coordinate,
+                      
                       title: "Destino",
                       descripcion: "Lugar de llegada"
                     },

@@ -7,7 +7,7 @@ import {
   TouchableHighlight
 } from "react-native";
 import MapView, { Marker, Polyline } from "react-native-maps";
-
+import Modal from "./Modal";
 const calcularDelta = (longitud, latitud, accuracy) => {
   const oneDegreeOfLongitudMeters = 111.32;
   const circunference = 40075 / 360;
@@ -24,11 +24,16 @@ function MapRace(props) {
   const [error, setError] = useState("No hay coordenadas");
   
   const { carrera} = props.navigation.state.params;
-  const [marcador, setmarcador] = useState([carrera.cordenadas[1]]);
-  const ruta=carrera.cordenadas[2].ruta;
-console.log(carrera);
- console.log();
   const cordenadas=carrera.cordenadas[0];
+  const [initPosition,setInitPosition]=useState({longitude:cordenadas.longitude,latitude:cordenadas.latitude,title:"Ubicación Inicial"});
+  
+  const [marcador, setmarcador] = useState([carrera.cordenadas[1],initPosition]);
+  console.log(marcador);
+  const ruta=carrera.cordenadas[2].ruta;
+ 
+  //console.log(carrera);
+ //console.log();
+  
   
   const [region, setRegion] = useState({
     latitude: cordenadas.latitude,
@@ -88,14 +93,14 @@ console.log(carrera);
           >
             {marcador.map((marker, i) => {
               return (
-                <Marker key={i} coordinate={{longitude:marker.longitude,latitude:marker.latitude}} title="Lugar Destino"></Marker>
+                <Marker key={i} coordinate={{longitude:marker.longitude,latitude:marker.latitude}} title={marker.title} pinColor={i==0 ? "gold":"indigo"} ></Marker>
               );
             })}
             {ruta ? (
               <Polyline
-                strokeWidth={10}
+                strokeWidth={7}
                 coordinates={ruta}
-                strokeColor="rgba(80,255,235,.5)"
+                strokeColor="#4BA5B1"
                 strokeColors={["#238C23", "#7F0000"]}
               />
             ) : null}
@@ -104,7 +109,7 @@ console.log(carrera);
             style={{
               flex: 1,
               position: "absolute",
-              bottom: 0,
+              bottom: "20%",
               left: "5%",
               backgroundColor: "#303248",
               borderRadius: 20,
@@ -134,7 +139,8 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#fff",
     alignItems: "center",
-    justifyContent: "flex-start"
+    justifyContent: "flex-start",
+    //marginTop:25
   },
   mapStyle: {
     width: 360,
@@ -142,6 +148,7 @@ const styles = StyleSheet.create({
   }
 });
 export default MapRace;
+
 
 /*{!carrera.cordenadas ? (
     <Polyline
