@@ -1,13 +1,9 @@
-import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  Dimensions,
-  StyleSheet,
-  TouchableHighlight
-} from "react-native";
-import MapView, { Marker, Polyline } from "react-native-maps";
-import Modal from "./Modal";
+import React, { useState, useEffect } from 'react';
+import { View, Text, Dimensions, StyleSheet } from 'react-native';
+import { Button, Icon } from 'react-native-elements';
+import MapView, { Marker, Polyline } from 'react-native-maps';
+import Modal from './Modal';
+import ModalConductor from './modalConductorData';
 const calcularDelta = (longitud, latitud, accuracy) => {
   const oneDegreeOfLongitudMeters = 111.32;
   const circunference = 40075 / 360;
@@ -18,23 +14,31 @@ const calcularDelta = (longitud, latitud, accuracy) => {
     lonDelta
   };
 };
-const { width, height } = Dimensions.get("window");
+const { width, height } = Dimensions.get('window');
 
 function MapRace(props) {
-  const [error, setError] = useState("No hay coordenadas");
-  
-  const { carrera} = props.navigation.state.params;
-  const cordenadas=carrera.cordenadas[0];
-  const [initPosition,setInitPosition]=useState({longitude:cordenadas.longitude,latitude:cordenadas.latitude,title:"Ubicación Inicial"});
-  
-  const [marcador, setmarcador] = useState([carrera.cordenadas[1],initPosition]);
+  const [error, setError] = useState('No hay coordenadas');
+  const [isVisible,setIsVisible]=useState(false);
+  const { carrera } = props.navigation.state.params;
+  const info = carrera.info;
+  console.log(props.navigation);
+  const cordenadas = carrera.cordenadas[0];
+  const [initPosition, setInitPosition] = useState({
+    longitude: cordenadas.longitude,
+    latitude: cordenadas.latitude,
+    title: 'Ubicación Inicial'
+  });
+
+  const [marcador, setmarcador] = useState([
+    carrera.cordenadas[1],
+    initPosition
+  ]);
   console.log(marcador);
-  const ruta=carrera.cordenadas[2].ruta;
- 
+  const ruta = carrera.cordenadas[2].ruta;
+
   //console.log(carrera);
- //console.log();
-  
-  
+  //console.log();
+
   const [region, setRegion] = useState({
     latitude: cordenadas.latitude,
     longitude: cordenadas.longitude,
@@ -44,8 +48,8 @@ function MapRace(props) {
 
   useEffect(() => {
     (async () => {
-        navigator.geolocation.getCurrentPosition((position )=>{
-          const { latitude, longitude, accuracy } = position.coords;
+      navigator.geolocation.getCurrentPosition((position) => {
+        const { latitude, longitude, accuracy } = position.coords;
 
         setRegion({
           latitude,
@@ -58,13 +62,11 @@ function MapRace(props) {
           latitude,
           accuracy
         );
-        })
-
-      
+      });
     })();
   }, []);
 
-  const onUserPostionChange = coordinate => {
+  const onUserPostionChange = (coordinate) => {
     const { latitude, longitude } = coordinate;
     //console.log(`Nuevas coordenadas, lon:${longitude}, lati:${latitude}`);
     setRegion({
@@ -73,13 +75,21 @@ function MapRace(props) {
       longitude
     });
   };
+  const showModal = () => {
 
+      setIsVisible(true);
+
+  }
+  const finalizar=()=>{
+    alert("Muchas gracias por viajar con nosotros");
+    props.navigation.navigate("Service");
+  }
   return (
     <View style={styles.container}>
       {carrera ? (
         <>
           <MapView
-            onUserLocationChange={e =>
+            onUserLocationChange={(e) =>
               onUserPostionChange(e.nativeEvent.coordinate)
             }
             style={styles.mapStyle}
@@ -89,46 +99,107 @@ function MapRace(props) {
             maxZoomLevel={20}
             showsUserLocation={true}
             initialRegion={region}
-            region={region}
-          >
+            region={region}>
             {marcador.map((marker, i) => {
               return (
-                <Marker key={i} coordinate={{longitude:marker.longitude,latitude:marker.latitude}} title={marker.title} pinColor={i==0 ? "gold":"indigo"} ></Marker>
+                <Marker
+                  key={i}
+                  coordinate={{
+                    longitude: marker.longitude,
+                    latitude: marker.latitude
+                  }}
+                  title={marker.title}
+                  pinColor={i == 0 ? 'gold' : 'indigo'}></Marker>
               );
             })}
             {ruta ? (
               <Polyline
                 strokeWidth={7}
                 coordinates={ruta}
-                strokeColor="#4BA5B1"
-                strokeColors={["#238C23", "#7F0000"]}
+                strokeColor='#4BA5B1'
+                strokeColors={['#238C23', '#7F0000']}
               />
             ) : null}
           </MapView>
           <View
             style={{
               flex: 1,
-              position: "absolute",
-              bottom: "20%",
-              left: "5%",
-              backgroundColor: "#303248",
+              position: 'absolute',
+              bottom: '20%',
+              left: '5%',
               borderRadius: 20,
               padding: 16,
               opacity: 0.98
-            }}
-          >
-            <TouchableHighlight >
-              <Text style={{ color: "yellow" }}> Panico</Text>
-            </TouchableHighlight>
-            <TouchableHighlight>
-              <Text style={{ color: "yellow" }}>
-                {" "}
-                Ver informacion conductor
-              </Text>
-            </TouchableHighlight>
+            }}>
+            <Button
+              title='Alerta'
+              icon={
+                <Icon
+                  name='bell-plus-outline'
+                  type='material-community'
+                  size={15}
+                  raised
+                />
+              }
+              buttonStyle={{ backgroundColor: 'rgba(249,21,29,1)' }}
+              containerStyle={{ marginBottom: 5 }}
+              raised
+              onPress={()=>{alert("Enviando coordenadas a un amigo")}}
+            />
           </View>
+          <View
+            style={{
+              flex: 1,
+              position: 'absolute',
+              bottom: '88%',
+              right: '0%',
+              borderRadius: 20,
+              padding: 10,
+              opacity: 0.98
+            }}>
+            <Button
+              title='Conductor'
+              icon={
+                <Icon
+                  name='information-outline'
+                  type='material-community'
+                  size={12}
+                  raised
+                />
+              }
+              titleStyle={{color: "yellow"}}
+              buttonStyle={{backgroundColor:"#303248",borderRadius:50}}
+              onPress={()=>{showModal()}}
+            />
+          </View>
+          <View
+            style={{
+              flex: 1,
+              position: 'absolute',
+              bottom: '20%',
+              right: '5%',
+              borderRadius: 20,
+              padding: 16,
+              opacity: 0.98
+            }}>
+            <Button
+              title='Finalizar'
+              icon={
+                <Icon
+                  name='information-outline'
+                  type='material-community'
+                  size={15}
+                  raised
+                 
+                />
+              }
+              titleStyle={{color: "yellow"}}
+              buttonStyle={{backgroundColor:"#303248"}}
+              onPress={()=>{finalizar()}}
+            />
+          </View>
+          <Modal isVisible={isVisible} setIsVisible={setIsVisible} children={<ModalConductor info={info}/>}/>
         </>
-        
       ) : (
         <Text> no llego nada</Text>
       )}
@@ -137,9 +208,9 @@ function MapRace(props) {
 }
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "flex-start",
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'flex-start'
     //marginTop:25
   },
   mapStyle: {
@@ -148,7 +219,6 @@ const styles = StyleSheet.create({
   }
 });
 export default MapRace;
-
 
 /*{!carrera.cordenadas ? (
     <Polyline

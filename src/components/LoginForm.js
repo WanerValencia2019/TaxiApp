@@ -137,7 +137,7 @@ function LoginForm(props) {
       <View style={styles.containerOpt}>
         <SocialIcon
           title='Iniciar con google'
-          underlayColor={false}
+          
           light
           type='google'
         />

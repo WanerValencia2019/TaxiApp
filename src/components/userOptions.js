@@ -56,7 +56,7 @@ function UserOptions() {
         />
       ))}
       
-      <Modal isVisible={true}>
+      <Modal isVisible={false}>
           {form}
       </Modal>
     </View>
