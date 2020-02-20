@@ -4,11 +4,7 @@
     "slug": "TaxiApp",
     "privacy": "public",
     "sdkVersion": "36.0.0",
-    "platforms": [
-      "ios",
-      "android",
-      "web"
-    ],
+    "platforms": ["ios", "android", "web"],
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -20,11 +16,22 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
-    }
+      "supportsTablet": true,
+      "bundleIdentifier": "com.dosteam.taxisecure",
+      "buildNumber": "1.0.0"
+    },
+    "android": {
+      "package": "com.dosteam.taxisecure",
+      "versionCode": 1,
+      "permissions": [
+        "CAMERA",
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION"
+      ]
+    },
+    "description": "Esta es una aplicación enfocada en la seguridad del usuario al coger un servicio de taxi.",
+    "githubUrl": "https://github.com/WanerValencia2019/TaxiApp/"
   }
 }

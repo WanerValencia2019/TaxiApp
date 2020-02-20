@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -6,12 +6,12 @@ import {
   StyleSheet,
   TouchableHighlight,
   Header
-} from "react-native";
-import MapView, { Marker, Polyline } from "react-native-maps";
-const { width, height } = Dimensions.get("screen");
-import * as Location from "expo-location";
-import * as Permissions from "expo-permissions";
-import MapRace from "./MapRace";
+} from 'react-native';
+import MapView, { Marker, Polyline } from 'react-native-maps';
+const { width, height } = Dimensions.get('screen');
+
+import * as Permissions from 'expo-permissions';
+import MapRace from './MapRace';
 
 const calcularDelta = (longitud, latitud, accuracy) => {
   const oneDegreeOfLongitudMeters = 111.32;
@@ -30,55 +30,36 @@ function MapShow(props) {
     return <MapRace conductor={conductor} cordenadas={cordenadas} />;
   }
 
-  const [error, setError] = useState("No hay coordenadas");
+  const [error, setError] = useState('No hay coordenadas,Por favor verifica tu conexión');
   const [region, setRegion] = useState(null);
   const [marker, setmarker] = useState([]);
   const [line, setline] = useState(null);
   useEffect(() => {
     (async () => {
-      let { status } = await Permissions.askAsync(Permissions.LOCATION);
-      if (status !== "granted") {
-        setError("Permission to access location was denied");
-        return;
-      }
-      if (status == "granted") {
-        let location = await Location.getCurrentPositionAsync({});
-        location.coords.accuracy;
-        location.coords;
+        navigator.geolocation.getCurrentPosition((position) => {
+          const { latitude, longitude, accuracy } = position.coords;
 
-        const { latitude, longitude, accuracy } = location.coords;
+          const { lonDelta, latDelta } = calcularDelta(
+            longitude,
+            latitude,
+            accuracy
+          );
 
-        const { lonDelta, latDelta } = calcularDelta(
-          longitude,
-          latitude,
-          accuracy
-        );
-
-        setRegion({
-          latitude,
-          longitude,
-          latitudeDelta: latDelta,
-          longitudeDelta: lonDelta
+          setRegion({
+            latitude,
+            longitude,
+            latitudeDelta: latDelta,
+            longitudeDelta: lonDelta
+          });
         });
-        //console.log(region);
-
-        removerWacth = await Location.watchPositionAsync(
-          { distanceInterval: 5, timeInterval: 100000 },
-          position => {}
-        );
-
-        return () => {
-          removerWacth.remove();
-          console.log("se esta desmontando");
-        };
-      }
+      
     })();
   }, []);
 
-  const ponerMarcador = coordinate => {
-    setmarker([{ coordinate,"inicio":region }]);
+  const ponerMarcador = (coordinate) => {
+    setmarker([{ coordinate, inicio: region }]);
     //console.log(marker);
-    const marcador=marker[0];
+    const marcador = marker[0];
     console.log(marcador);
     const { latitude, longitude } = region;
     setline([
@@ -90,7 +71,7 @@ function MapShow(props) {
     ]);
   };
 
-  const onUserPostionChange = cordinate => {
+  const onUserPostionChange = (cordinate) => {
     const { latitude, longitude } = cordinate;
     //console.log(`Nuevas coordenadas, lon:${longitude}, lati:${latitude}`);
     setRegion({
@@ -105,7 +86,7 @@ function MapShow(props) {
       {region ? (
         <>
           <MapView
-            onUserLocationChange={e =>
+            onUserLocationChange={(e) =>
               onUserPostionChange(e.nativeEvent.coordinate)
             }
             style={styles.mapStyle}
@@ -116,68 +97,65 @@ function MapShow(props) {
             showsUserLocation={true}
             initialRegion={region}
             region={region}
-            onPress={e => {
+            onPress={(e) => {
               ponerMarcador(e.nativeEvent.coordinate);
-            }}
-          >
-            {marker.map(marker => {
-              return <Marker {...marker} title="Lugar Destino"></Marker>;
+            }}>
+            {marker.map((marker) => {
+              return <Marker {...marker} title='Lugar Destino'></Marker>;
             })}
 
             {line ? (
               <Polyline
                 strokeWidth={3}
                 coordinates={line}
-                strokeColor="gray"
-                strokeColors={["#238C23", "#7F0000"]}
+                strokeColor='gray'
+                strokeColors={['#238C23', '#7F0000']}
               />
             ) : null}
           </MapView>
           <View
             style={{
               flex: 1,
-              position: "absolute",
+              position: 'absolute',
               bottom: 0,
-              left: "5%",
-              backgroundColor: "#303248",
+              left: '5%',
+              backgroundColor: '#303248',
               borderRadius: 20,
               padding: 16,
               opacity: 0.98
-            }}
-          >
+            }}>
             <TouchableHighlight
-              onPress={e => {
+              onPress={(e) => {
                 if (!marker.length) {
-                  alert("Debes Seleccionar un lugar de destino");
+                  alert('Debes Seleccionar un lugar de destino');
                   return;
                 }
-                navigation.navigate("ConductorScanner", {
+                navigation.navigate('ConductorScanner', {
                   cordenadas: [
                     {
                       ...region,
-                      title: "Destino",
-                      descripcion: "Lugar de arrivo"
+                      title: 'Destino',
+                      descripcion: 'Lugar de arrivo'
                     },
 
                     {
                       ...marker[0].coordinate,
-                      
-                      title: "Destino",
-                      descripcion: "Lugar de llegada"
+
+                      title: 'Destino',
+                      descripcion: 'Lugar de llegada'
                     },
                     {
-                      ruta:line
+                      ruta: line
                     }
                   ]
                 });
-              }}
-            >
-              <Text style={{ color: "yellow" }}>Iniciar Carrera</Text>
+              }}>
+              <Text style={{ color: 'yellow' }}>Iniciar Carrera</Text>
             </TouchableHighlight>
           </View>
         </>
       ) : (
-        <Text>{error}</Text>
+        <Text style={{color:"rgba(255,0,0,.7)",fontSize:20,marginTop:30}}>{error}</Text>
       )}
     </View>
   );
@@ -185,9 +163,9 @@ function MapShow(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "flex-start"
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'flex-start'
   },
   mapStyle: {
     width: 360,
